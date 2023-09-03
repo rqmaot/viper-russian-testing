@@ -1,0 +1,211 @@
+﻿﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" type="image/png" href="monarc.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russian Keyboard Practice</title>
+    <style>
+        body {
+
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0px;
+            background-image: url('tarkov.jpg'); /* Set background image */
+            background-size: cover;
+            background-position: center;
+            backdrop-filter: blur(5px); /* Add blur effect to the background */
+        }
+        #title {
+            margin-top: 50px; /* Move the title 50 pixels down */
+            color: white; /* Add white text color */
+        }
+        #container {
+            position: relative; /* Make the container position relative */
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background for the container */
+            border: 2px solid #333;
+            border-radius: 10px;
+        }
+        #word-container {
+            margin-top: 20px;
+        }
+        #word {
+            font-size: 24px;
+        }
+        #pronunciation {
+            font-style: italic;
+        }
+        #translation {
+            margin-top: 20px;
+        }
+        #input-container {
+            margin-top: 20px;
+        }
+        #input-box {
+            font-size: 18px;
+            width: 300px;
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            outline: none;
+        }
+        .correct-animation {
+            animation: correct-flash 1s 2;
+        }
+        @keyframes correct-flash {
+            0%, 100% {
+                background-color: transparent;
+                color: black;
+            }
+            50% {
+                background-color: limegreen; /* Bright green color */
+                color: white;
+            }
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-5px); }
+            40% { transform: translateX(5px); }
+            60% { transform: translateX(-5px); }
+            80% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
+        }
+        /* Style for the Monarc image */
+        #monarc-image {
+            position: absolute;
+            bottom: 10px; /* Adjust the distance from the bottom */
+            left: 10px; /* Adjust the distance from the left */
+            width: 100px; /* Adjust the image width */
+        }
+        /* Style for the "By: Monarc" text */
+        #author {
+            position: absolute;
+            bottom: 10px; /* Adjust the distance from the bottom */
+            left: 110px; /* Position to the right of the image */
+            font-size: 20px; /* Increase font size */
+            font-family: 'Georgia', serif; /* Choose a fancy font */
+            color: white; /* Dark text color */
+        }
+    </style>
+</head>
+    <a href="https://snviper.github.io/Russian.github.io/" id="report-bugs-link" style="position: absolute; bottom: 30px; right: 40px; font-size: 20px; color: white; text-decoration: none;">Report bugs</a>
+<body>
+    <h1 id="title">Russian Keyboard Practice</h1>
+    
+    <div id="container">
+        <div id="word-container">
+            <div id="word"></div>
+            <div id="pronunciation"></div>
+            <div id="translation"></div>
+        </div>
+
+        <div id="input-container">
+            <input type="text" id="input-box" placeholder="Type the word">
+        </div>
+    </div>
+    
+    <!-- Monarc image -->
+    <img src="monarc.png" alt="Monarc" id="monarc-image">
+    
+    <!-- "By: Monarc" text -->
+    <p id="author">By: Monarch</p>
+    
+<script>
+    const wordList = [
+        { word: '1', pronunciation: 'Privet', translation: 'Hello' },
+        { word: '2', pronunciation: 'Dom', translation: 'House' },
+        { word: '3', pronunciation: 'Mama', translation: 'Mom' },
+        { word: '4', pronunciation: 'Papa', translation: 'Dad' },
+        { word: '5', pronunciation: 'Privet', translation: 'Hello' },
+        { word: '6', pronunciation: 'Dom', translation: 'House' },
+        { word: '7', pronunciation: 'Mama', translation: 'Mom' },
+        { word: '8', pronunciation: 'Papa', translation: 'Dad' },
+        // Add more words here as needed
+    ];
+
+    let completedWords = [];
+    let currentWordIndex = -1;
+    let currentWordChars = [];
+    let wordCompleted = false;
+
+    function chooseRandomWord() {
+        // Filter out completed words
+        const availableWords = wordList.filter(wordObj => !completedWords.includes(wordObj.word));
+        if (availableWords.length === 0) {
+            // Reset completedWords array if all words have been completed
+            if (completedWords.length === wordList.length) {
+                completedWords = [];
+            }
+            return chooseRandomWord(); // Choose a word again
+        }
+        return availableWords[Math.floor(Math.random() * availableWords.length)];
+    }
+
+    function displayRandomWord() {
+        const randomWordObj = chooseRandomWord();
+        const randomWord = randomWordObj.word.toLowerCase();
+        document.getElementById('word').textContent = randomWordObj.word;
+        document.getElementById('pronunciation').textContent = `Pronunciation: ${randomWordObj.pronunciation}`;
+        document.getElementById('translation').textContent = `Translation: ${randomWordObj.translation}`;
+        currentWordChars = randomWord.split('');
+        wordCompleted = false;
+        return randomWord;
+    }
+
+    function init() {
+        currentWordIndex = -1;
+        displayRandomWord();
+    }
+
+    init();
+
+    const inputBox = document.getElementById('input-box');
+
+    inputBox.addEventListener('keydown', function (event) {
+        let userInput = this.value.trim().toLowerCase();
+        const currentWord = currentWordChars.join('').toLowerCase();
+
+        if (event.key === 'Backspace') {
+            if (wordCompleted) {
+                event.preventDefault(); // Prevent backspace when the word is completed
+                userInput = '';
+            }
+            return;
+        }
+
+        if (!currentWord.startsWith(userInput + event.key.toLowerCase())) {
+            event.preventDefault(); // Prevent input of incorrect character
+            this.classList.add('shake'); // Apply the shake animation
+            setTimeout(() => {
+                this.classList.remove('shake'); // Remove the shake animation
+            }, 500);
+        }
+
+        if (userInput + event.key.toLowerCase() === currentWord) {
+            this.classList.add('correct-animation'); // Apply the correct animation to the input box
+            setTimeout(() => {
+                this.classList.remove('correct-animation'); // Remove the animation
+                wordCompleted = true;
+                completedWords.push(currentWordChars.join('')); // Mark the word as completed
+                currentWordIndex++;
+                if (currentWordIndex >= wordList.length) {
+                    currentWordIndex = 0;
+                }
+                displayRandomWord();
+                this.value = '';
+            }, 1000); // Wait for 2 seconds before moving to the next word
+        }
+    });
+</script>
+
+
+</body>
+</html>
