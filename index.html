@@ -1,4 +1,4 @@
-﻿﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="icon" type="image/png" href="monarc.png">
@@ -110,6 +110,9 @@
         <div id="input-container">
             <input type="text" id="input-box" placeholder="Type the word">
         </div>
+        <p>Class Total: <span id="classTotal"></span>
+        <br>
+          Goal: 10,000</p>
     </div>
     
     <!-- Monarc image -->
@@ -119,6 +122,24 @@
     <p id="author">By: Monarch</p>
     
 <script>
+
+    function incrementCounter() {
+      let body = document.getElementsByTagName('body')[0];
+      let frame = document.createElement('frame');
+      frame.style.display = 'none';
+      frame.src = 'https://russian.snow-rentaroren.repl.co/index.php';
+      body.appendChild(frame);
+    }
+
+    function updateClassTotal() {
+      let head = document.getElementsByTagName('head')[0];
+      let script = document.createElement('script');
+      script.src = 'https://russian.snow-rentaroren.repl.co/count.js';
+      head.appendChild(script);
+    }
+
+    updateClassTotal();
+  
     const wordList = [
         { word: '1', pronunciation: 'Privet', translation: 'Hello' },
         { word: '2', pronunciation: 'Dom', translation: 'House' },
@@ -191,6 +212,10 @@
 
         if (userInput + event.key.toLowerCase() === currentWord) {
             this.classList.add('correct-animation'); // Apply the correct animation to the input box
+
+            // update count
+            incrementCounter();
+          
             setTimeout(() => {
                 this.classList.remove('correct-animation'); // Remove the animation
                 wordCompleted = true;
@@ -199,6 +224,7 @@
                 if (currentWordIndex >= wordList.length) {
                     currentWordIndex = 0;
                 }
+                updateClassTotal();
                 displayRandomWord();
                 this.value = '';
             }, 1000); // Wait for 2 seconds before moving to the next word
