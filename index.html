@@ -184,7 +184,7 @@
     const inputBox = document.getElementById('input-box');
 
     inputBox.addEventListener('keydown', function (event) {
-        let userInput = this.value === " " ? " " : this.value.trim().toLowerCase();
+        let userInput = this.value.toLowerCase();
         const currentWord = currentWordChars.join('').toLowerCase();
 
         if (event.key === 'Backspace') {
