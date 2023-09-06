@@ -201,6 +201,8 @@
             setTimeout(() => {
                 this.classList.remove('shake'); // Remove the shake animation
             }, 500);
+        } else {
+            document.getElementById("translation").innerText += "[" + userInput + "]";
         }
 
         if (userInput + event.key.toLowerCase() === currentWord) {
