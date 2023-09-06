@@ -1,4 +1,8 @@
 const wordList = [
+  { word: "malapasta and renpasta", pronunciation: "", translation: ""}
+  ];
+
+/* const wordList = [
   { word: 'кот', pronunciation: 'kot', translation: 'cat' },
   { word: 'кто', pronunciation: 'kto', translation: 'who' },
   { word: 'что', pronunciation: 'chto', translation: 'what' },
@@ -103,4 +107,4 @@ const wordList = [
   { word: 'твоё', pronunciation: 'tvoyo', translation: 'your (neuter)' },
   { word: 'театр', pronunciation: 'teatr', translation: 'theater' },
   { word: 'твоя', pronunciation: 'tvoya', translation: 'your (feminine)' },
-];
+]; */
